@@ -1,0 +1,33 @@
+<header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+  {% if messages %}
+    <div class="container mt-3">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="container">
+    <a class="navbar-brand fw-bold text-primary" href="{% url 'taskhero:all_task' %}">TaskHero</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTaskHero">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTaskHero">
+      <ul class="navbar-nav ms-auto">
+        {% if request.user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'taskhero:all_task' %}">My Tasks</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'taskhero:add_task' %}">Add Task</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'account:logout' %}">Logout</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'account:signup' %}">Sign Up</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">Login</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</header>

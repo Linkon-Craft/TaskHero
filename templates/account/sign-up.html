@@ -1,0 +1,16 @@
+{% extends "partials/home.html" %}
+<title>{% block title %}Sign Up{% endblock %}</title>
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 75vh;">
+  <form action="{% url 'account:signup' %}" method="POST" class="card p-4 shadow-sm" style="max-width: 500px; width: 100%;">
+    <h2 class="text-center fw-bold mb-4 text-primary">Create Your TaskHero Account</h2>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary w-100 mt-2">Sign Up</button>
+    <p class="text-center mt-3 mb-0">Already have an account?
+      <a href="{% url 'account:login' %}" class="text-decoration-none">Login here</a>
+    </p>
+  </form>
+</div>
+{% endblock %}

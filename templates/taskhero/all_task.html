@@ -1,0 +1,90 @@
+{% extends "partials/home.html" %}
+
+<title>{% block title %}All Tasks{% endblock %}</title>
+
+{% block content %}
+<h2 class="text-center fw-bold mb-4">My Tasks</h2>
+
+<div class="row g-4">
+  <!-- To Do -->
+  <div class="col-md-4">
+    <div class="p-3 rounded bg-danger-subtle shadow-sm">
+      <h4 class="fw-bold text-uppercase">To Do</h4>
+      {% for t in all_task %}
+        {% if t.status == 'TD' %}
+        <div class="card my-3 shadow-sm">
+          <div class="card-body">
+            <h5>{{ t.title }}</h5>
+            <p class="text-muted mb-2">Due {{ t.due_date|date:"M d, Y" }}</p>
+            <span class="badge bg-{% if t.priority == 'HIGH' %}danger{% elif t.priority == 'MDIUM' %}warning text-dark{% else %}info{% endif %}">
+              {{ t.priority }}
+            </span>
+            <div class="mt-2">
+              <a href="{% url 'taskhero:task_details' t.id %}" class="text-decoration-none me-2">View</a>
+              <a href="{% url 'taskhero:update_task' t.id %}" class="text-decoration-none me-2">Edit</a>
+              <a href="{% url 'taskhero:confirm_delete' t.id %}" class="text-decoration-none text-danger">Delete</a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% empty %}
+        <p>No To-Do tasks yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- In Progress -->
+  <div class="col-md-4">
+    <div class="p-3 rounded bg-warning-subtle shadow-sm">
+      <h4 class="fw-bold text-uppercase">In Progress</h4>
+      {% for t in all_task %}
+        {% if t.status == 'IN_PRGRS' %}
+        <div class="card my-3 shadow-sm">
+          <div class="card-body">
+            <h5>{{ t.title }}</h5>
+            <p class="text-muted mb-2">Due {{ t.due_date|date:"M d, Y" }}</p>
+            <span class="badge bg-{% if t.priority == 'HIGH' %}danger{% elif t.priority == 'MDIUM' %}warning text-dark{% else %}info{% endif %}">
+              {{ t.priority }}
+            </span>
+            <div class="mt-2">
+              <a href="{% url 'taskhero:task_details' t.id %}" class="text-decoration-none me-2">View</a>
+              <a href="{% url 'taskhero:update_task' t.id %}" class="text-decoration-none me-2">Edit</a>
+              <a href="{% url 'taskhero:confirm_delete' t.id %}" class="text-decoration-none text-danger">Delete</a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% empty %}
+        <p>No In Progress tasks yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Completed -->
+  <div class="col-md-4">
+    <div class="p-3 rounded bg-info-subtle shadow-sm">
+      <h4 class="fw-bold text-uppercase">Completed</h4>
+      {% for t in all_task %}
+        {% if t.status == 'COMPTD' %}
+            <div class="card my-3 shadow-sm">
+            <div class="card-body">
+                <h5>{{ t.title }}</h5>
+                <p class="text-muted mb-2">Due {{ t.due_date|date:"M d, Y" }}</p>
+                <span class="badge bg-{% if t.priority == 'HIGH' %}danger{% elif t.priority == 'MDIUM' %}warning text-dark{% else %}info{% endif %}">
+                {{ t.priority }}
+                </span>
+                <div class="mt-2">
+                <a href="{% url 'taskhero:task_details' t.id %}" class="text-decoration-none me-2">View</a>
+                <a href="{% url 'taskhero:update_task' t.id %}" class="text-decoration-none me-2">Edit</a>
+                <a href="{% url 'taskhero:confirm_delete' t.id %}" class="text-decoration-none text-danger">Delete</a>
+                </div>
+            </div>
+            </div>
+        {% endif %}
+      {% empty %}
+        <p>No Completed tasks yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

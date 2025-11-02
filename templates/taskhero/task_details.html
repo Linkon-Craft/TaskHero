@@ -1,0 +1,17 @@
+{% extends "partials/home.html" %}
+{% block title %}Task Details{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm p-4">
+  <h3 class="mb-3">{{ task.title }}</h3>
+  <p>{{ task.description }}</p>
+  <p><strong>Due:</strong> {{ task.due_date|date:"M d, Y" }}</p>
+  <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+  <p><strong>Priority:</strong> {{ task.get_priority_display }}</p>
+
+  <div class="mt-3">
+    <a href="{% url 'taskhero:update_task' task.id %}" class="btn btn-primary me-2">Edit</a>
+    <a href="{% url 'taskhero:confirm_delete' task.id %}" class="btn btn-danger">Delete</a>
+  </div>
+</div>
+{% endblock %}

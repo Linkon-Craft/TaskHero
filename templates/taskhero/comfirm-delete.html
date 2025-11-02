@@ -1,0 +1,13 @@
+{% extends "partials/home.html" %}
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<div class="card p-4 text-center shadow-sm">
+  <h3>Are you sure you want to delete "<strong>{{ task.title }}</strong>"?</h3>
+  <form action="{% url 'taskhero:delete_task' task.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger me-2">Yes, Delete</button>
+    <a href="{% url 'taskhero:all_task' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

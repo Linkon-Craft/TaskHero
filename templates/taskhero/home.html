@@ -1,0 +1,18 @@
+{% extends "partials/home.html" %}
+{% block title %}Welcome to TaskHero{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+  <h1 class="fw-bold text-primary mb-3">Welcome to TaskHero</h1>
+  <p class="lead mb-4">
+    The simple and powerful way to manage your daily tasks, track progress, and stay organized. 
+  </p>
+
+  {% if request.user.is_authenticated %}
+    <a href="{% url 'taskhero:all_task' %}" class="btn btn-primary btn-lg">View My Tasks</a>
+  {% else %}
+    <a href="{% url 'account:signup' %}" class="btn btn-primary btn-lg me-2">Get Started</a>
+    <a href="{% url 'account:login' %}" class="btn btn-outline-primary btn-lg">Login</a>
+  {% endif %}
+</div>
+{% endblock %}

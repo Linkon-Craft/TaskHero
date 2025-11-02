@@ -2,9 +2,9 @@ from django.urls import path
 
 from . import views
 
-app_name="task"
+app_name='taskhero'
 
-urlpatterns={
+urlpatterns=[
     path('', views.home, name='home'),
     path('all/task/', views.all_task, name='all_task'),
     path('tasks/<int:task_id>/', views.task_details, name='task_details'),
@@ -12,4 +12,4 @@ urlpatterns={
     path('update/task/<int:task_id>/', views.update_task, name='update_task'),
     path('confirm/delete/<int:task_id>/', views.confirm_delete, name='confirm_delete'),
     path('delete/task/<int:task_id>/', views.delete_task, name='delete_task')
-}
+]

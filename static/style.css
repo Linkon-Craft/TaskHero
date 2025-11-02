@@ -1,0 +1,12 @@
+body {
+  background-color: #f8f9fa;
+}
+.card {
+  border-radius: 1rem;
+}
+.bg-danger-subtle { background-color: #ffe6e6; }
+.bg-warning-subtle { background-color: #fff7e0; }
+.bg-info-subtle { background-color: #e0f7fa; }
+.btn {
+  border-radius: 0.5rem;
+}

@@ -2,6 +2,8 @@ import os
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from datetime import date
+
 
 User = get_user_model()
 
@@ -25,3 +27,10 @@ class Task(models.Model):
     priority = models.CharField(max_length=50, choices=Priority.choices, default=Priority.MEDIUM)
     added_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "task")
 
+    def __str__(self):
+        return f"{self.title}, {self.description}"
+    
+    def check_and_update_status(self):
+        if self.status != Status.COMPLETED and date.today() >= self.due_date:
+            self.status = Status.COMPLETED
+            self.save(update_fields=["status"])

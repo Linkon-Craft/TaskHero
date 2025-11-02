@@ -16,7 +16,7 @@ def user_is_task_author(view_func):
 
         if task.added_by != request.user:
             messages.error(request, "You need to be logged in to perform that action.")
-            return redirect("account:login")
+            return redirect("taskhero:all_task")
         return view_func(request, *args, **kwargs)
     return _wrapped_view
 
@@ -26,24 +26,26 @@ def home(request):
 
 
 def all_task(request):
-    task = Task.objects.all()
-    return render(request, "taskhero/all_task.html", context=task)
+    tasks = Task.objects.all()
+    for task in tasks:
+        task.check_and_update_status()
+    return render(request, "taskhero/all_task.html", {'all_task':tasks})
 
 @login_required
 def task_details(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
-    return render(request, "taskhero/task_details.html", context=task)
+    return render(request, "taskhero/task_details.html", {'task':task})
 
 @login_required
 def add_task(request):
     form = TaskForm()
     if request.method == "POST":
-        form = TaskForm(request.POST, request.Files)
-        if form.is_valid:
+        form = TaskForm(request.POST, request.FILES)
+        if form.is_valid():
             task = form.save(commit=False)
-            task.added_by = request.User
+            task.added_by = request.user
             task.save()
-            return redirect('task:all_task')
+            return redirect('taskhero:all_task')
     return render(request, "taskhero/add_task.html", {"form":form})
 
 @login_required
@@ -56,7 +58,7 @@ def update_task(request, task_id):
 
         if form.is_valid():
             form.save()
-            return redirect('task:task_details')
+            return redirect('taskhero:all_task')
     
     context = {
         'form':form,
@@ -78,4 +80,4 @@ def delete_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     if request.method == "POST":
         task.delete()
-    return redirect('task:all_task')
+    return redirect('taskhero:all_task')

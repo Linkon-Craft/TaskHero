@@ -11,6 +11,7 @@ from .forms import TaskForm
 def user_is_task_author(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
+
         task_id = kwargs.get("task_id")
         task = get_object_or_404(Task, pk=task_id)
 
@@ -26,14 +27,14 @@ def home(request):
 
 
 def all_task(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.filter(added_by=request.user)
     for task in tasks:
         task.check_and_update_status()
     return render(request, "taskhero/all_task.html", {'all_task':tasks})
 
 @login_required
 def task_details(request, task_id):
-    task = get_object_or_404(Task, pk=task_id)
+    task = get_object_or_404(Task, pk=task_id, added_by=request.user)
     return render(request, "taskhero/task_details.html", {'task':task})
 
 @login_required
@@ -51,13 +52,14 @@ def add_task(request):
 @login_required
 @user_is_task_author
 def update_task(request, task_id):
-    task = get_object_or_404(Task, pk=task_id)
+    task = get_object_or_404(Task, pk=task_id, added_by=request.user)
     form = TaskForm(instance=task)
     if request.method == "POST":
         form = TaskForm(request.POST, request.FILES, instance=task)
 
         if form.is_valid():
             form.save()
+            messages.success(request, "Task updated successfully.")
             return redirect('taskhero:all_task')
     
     context = {
@@ -70,14 +72,14 @@ def update_task(request, task_id):
 @login_required
 @user_is_task_author
 def confirm_delete(request, task_id):
-    task = get_object_or_404(Task, pk=task_id)
+    task = get_object_or_404(Task, pk=task_id, added_by=request.user)
     return render(request, "taskhero/comfirm-delete.html", {'task': task})
 
 
 @login_required
 @user_is_task_author
 def delete_task(request, task_id):
-    task = get_object_or_404(Task, pk=task_id)
+    task = get_object_or_404(Task, pk=task_id, added_by=request.user)
     if request.method == "POST":
         task.delete()
     return redirect('taskhero:all_task')

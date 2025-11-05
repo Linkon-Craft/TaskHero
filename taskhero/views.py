@@ -8,18 +8,18 @@ from django.contrib import messages
 from .models import Task
 from .forms import TaskForm
 
-def user_is_task_author(view_func):
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
+# def user_is_task_author(view_func):
+#     @wraps(view_func)
+#     def _wrapped_view(request, *args, **kwargs):
 
-        task_id = kwargs.get("task_id")
-        task = get_object_or_404(Task, pk=task_id)
+#         task_id = kwargs.get("task_id")
+#         task = get_object_or_404(Task, pk=task_id)
 
-        if task.added_by != request.user:
-            messages.error(request, "You need to be logged in to perform that action.")
-            return redirect("taskhero:all_task")
-        return view_func(request, *args, **kwargs)
-    return _wrapped_view
+#         if task.added_by != request.user:
+#             messages.error(request, "You need to be logged in to perform that action.")
+#             return redirect("taskhero:all_task")
+#         return view_func(request, *args, **kwargs)
+#     return _wrapped_view
 
 
 def home(request):
@@ -50,7 +50,6 @@ def add_task(request):
     return render(request, "taskhero/add_task.html", {"form":form})
 
 @login_required
-@user_is_task_author
 def update_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id, added_by=request.user)
     form = TaskForm(instance=task)
@@ -70,14 +69,12 @@ def update_task(request, task_id):
 
 
 @login_required
-@user_is_task_author
 def confirm_delete(request, task_id):
     task = get_object_or_404(Task, pk=task_id, added_by=request.user)
     return render(request, "taskhero/comfirm-delete.html", {'task': task})
 
 
 @login_required
-@user_is_task_author
 def delete_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id, added_by=request.user)
     if request.method == "POST":

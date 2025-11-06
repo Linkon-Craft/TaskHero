@@ -1,4 +1,4 @@
-from functools import wraps
+from django.db.models import Q
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -27,10 +27,26 @@ def home(request):
 
 
 def all_task(request):
+    query = request.GET.get('q', '')
     tasks = Task.objects.filter(added_by=request.user)
     for task in tasks:
         task.check_and_update_status()
-    return render(request, "taskhero/all_task.html", {'all_task':tasks})
+    
+    if query:
+        tasks = tasks.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(status__icontains=query) |
+            Q(priority__icontains=query)
+        )
+    
+    context = {
+        'query': query,
+        'all_task': tasks
+    }
+
+    
+    return render(request, "taskhero/all_task.html", context)
 
 @login_required
 def task_details(request, task_id):

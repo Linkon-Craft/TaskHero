@@ -5,6 +5,22 @@
 {% block content %}
 <h2 class="text-center fw-bold mb-4">My Tasks</h2>
 
+<!-- 🔍 Search bar -->
+<form method="GET" action="{% url 'taskhero:all_task' %}" class="d-flex justify-content-center mb-4">
+  <input
+    type="text"
+    name="q"
+    value="{{ query }}"
+    class="form-control w-50 me-2"
+    placeholder="Search your tasks..."
+  >
+  <button class="btn btn-primary" type="submit">Search</button>
+</form>
+
+{% if query %}
+  <p class="text-center text-muted">Showing results for: "<strong>{{ query }}</strong>"</p>
+{% endif %}
+
 <div class="row g-4">
   <!-- To Do -->
   <div class="col-md-4">

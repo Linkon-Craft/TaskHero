@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
+
 from .models import Task
 from .forms import TaskForm
 
@@ -35,7 +36,6 @@ def all_task(request):
     if query:
         tasks = tasks.filter(
             Q(title__icontains=query) |
-            Q(description__icontains=query) |
             Q(status__icontains=query) |
             Q(priority__icontains=query)
         )
@@ -69,6 +69,10 @@ def add_task(request):
 def update_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id, added_by=request.user)
     form = TaskForm(instance=task)
+    if not task.can_still_be_edited:
+        messages.error(request, "You can no longer edit this task")
+        return redirect('taskhero:all_task')
+    
     if request.method == "POST":
         form = TaskForm(request.POST, request.FILES, instance=task)
 

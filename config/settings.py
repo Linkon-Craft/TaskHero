@@ -27,12 +27,7 @@ SECRET_KEY = 'django-insecure-bob!q!-#m*96ks*g&c@ql$h)%-=dn6k6ztsv_#dev#3@9m4yh0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'taskhero-4.onrender.com',
-    'localhost',
-    '127.0.0.1',
-]
-
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

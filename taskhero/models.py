@@ -32,10 +32,10 @@ class Task(models.Model):
     def __str__(self):
         return f"{self.title}, {self.description}"
     
-    @property
-    def can_still_be_edited(self):
-        now = timezone.now()
-        return now - self.created_at <= timedelta(minutes=5)
+    # @property
+    # def can_still_be_edited(self):
+    #     now = timezone.now()
+    #     return now - self.created_at <= timedelta(minutes=5)
     
     def check_and_update_status(self):
         if self.status != Status.COMPLETED and date.today() >= self.due_date:

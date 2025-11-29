@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +27,12 @@ SECRET_KEY = 'django-insecure-bob!q!-#m*96ks*g&c@ql$h)%-=dn6k6ztsv_#dev#3@9m4yh0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'taskhero-4.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
+
 
 
 # Application definition
@@ -123,6 +129,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR/ "static"]
 
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

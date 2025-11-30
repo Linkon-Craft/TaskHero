@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 import os
 
 
@@ -82,9 +83,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql',
+
+        # 'NAME': 'linkon',
+
+        # 'USER': 'postgres',
+
+        # 'PASSWORD': 'Panasonic2020@',
+
+        # 'HOST': '',
+
+        # 'PORT': '5432',
+        
     }
 }
+
+DATABASES["default"] = dj_database_url.parse("postgresql://task_hero_user:sibsADVSeP9HudTZCyhp57qAvKKy94Qo@dpg-d4m3e0m3jp1c739m11p0-a.oregon-postgres.render.com/task_hero")
 
 
 # Password validation

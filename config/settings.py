@@ -170,6 +170,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://taskhero-4.onrender.com',
 ]
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 LOGIN_URL = 'account:login'
 LOGIN_REDIRECT_URL = 'task:all_task'

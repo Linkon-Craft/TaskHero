@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
+
 from pathlib import Path
 import dj_database_url
-import os
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -83,23 +85,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        # 'ENGINE': 'django.db.backends.postgresql',
-
-        # 'NAME': 'linkon',
-
-        # 'USER': 'postgres',
-
-        # 'PASSWORD': 'Panasonic2020@',
-
-        # 'HOST': '',
-
-        # 'PORT': '5432',
-        
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 
-DATABASES["default"] = dj_database_url.parse("postgresql://task_hero_user:sibsADVSeP9HudTZCyhp57qAvKKy94Qo@dpg-d4m3e0m3jp1c739m11p0-a.oregon-postgres.render.com/task_hero")
+        
+DATABASE_URL = os.getenv("DATABASE_URL")
 
+if DATABASE_URL:
+    DATABASES["default"] = dj_database_url.parse(
+        DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=True,
+    )
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

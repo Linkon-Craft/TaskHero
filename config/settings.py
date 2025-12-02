@@ -49,7 +49,8 @@ CSRF_TRUSTED_ORIGINS = []
 if render_domain:
     CSRF_TRUSTED_ORIGINS.append(f"https://{render_domain}")
     CSRF_TRUSTED_ORIGINS.append("https://*.onrender.com")
-
+print(ALLOWED_HOSTS)
+print(CSRF_TRUSTED_ORIGINS)
 
 # Application definition
 

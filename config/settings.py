@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 from pathlib import Path
 import dj_database_url
@@ -30,7 +34,21 @@ SECRET_KEY = 'django-insecure-bob!q!-#m*96ks*g&c@ql$h)%-=dn6k6ztsv_#dev#3@9m4yh0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+]
+
+render_domain = os.getenv("RENDER_DOMAIN")
+
+if render_domain:
+    ALLOWED_HOSTS.append(render_domain)
+
+CSRF_TRUSTED_ORIGINS = []
+
+if render_domain:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{render_domain}")
+    CSRF_TRUSTED_ORIGINS.append("https://*.onrender.com")
 
 
 # Application definition

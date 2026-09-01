@@ -14,12 +14,10 @@ from .forms import TaskForm
 def home(request):
     return render(request, "taskhero/home.html")
 
-
+@login_required
 def all_task(request):
     query = request.GET.get('q', '')
     tasks = Task.objects.filter(added_by=request.user)
-    for task in tasks:
-        task.check_and_update_status()
     
     if query:
         tasks = tasks.filter(

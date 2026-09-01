@@ -11,5 +11,6 @@ urlpatterns=[
     path('add/task/', views.add_task, name='add_task'),
     path('update/task/<int:task_id>/', views.update_task, name='update_task'),
     path('confirm/delete/<int:task_id>/', views.confirm_delete, name='confirm_delete'),
-    path('delete/task/<int:task_id>/', views.delete_task, name='delete_task')
+    path('delete/task/<int:task_id>/', views.delete_task, name='delete_task'),
+    path('get-notifications/', views.get_notifications, name='get_notifications'),
 ]

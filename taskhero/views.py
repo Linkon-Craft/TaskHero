@@ -3,24 +3,12 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse
 
 
-
-from .models import Task
+from .models import Task, Notification
 from .forms import TaskForm
 
-# def user_is_task_author(view_func):
-#     @wraps(view_func)
-#     def _wrapped_view(request, *args, **kwargs):
-
-#         task_id = kwargs.get("task_id")
-#         task = get_object_or_404(Task, pk=task_id)
-
-#         if task.added_by != request.user:
-#             messages.error(request, "You need to be logged in to perform that action.")
-#             return redirect("taskhero:all_task")
-#         return view_func(request, *args, **kwargs)
-#     return _wrapped_view
 
 
 def home(request):
@@ -100,3 +88,25 @@ def delete_task(request, task_id):
     if request.method == "POST":
         task.delete()
     return redirect('taskhero:all_task')
+
+
+@login_required
+def get_notifications(request):
+
+    notifications = Notification.objects.filter(
+        user=request.user,
+        read=False
+    )
+
+    data = [
+        {
+            "id": n.id,
+            "message": n.message,
+            "type": n.notification_type,
+            "task_id": n.task_id,
+            "created_at": n.created_at.isoformat(),
+        }
+        for n in notifications
+    ]
+
+    return JsonResponse(data, safe=False)

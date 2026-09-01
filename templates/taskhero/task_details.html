@@ -5,7 +5,7 @@
 <div class="card shadow-sm p-4">
   <h3 class="mb-3">{{ task.title }}</h3>
   <p>{{ task.description }}</p>
-  <p><strong>Due:</strong> {{ task.due_date|date:"M d, Y" }}</p>
+  <p><strong>Due:</strong> {{ task.due_date|date:"M d, Y,  g:i A" }}</p>
   <p><strong>Status:</strong> {{ task.get_status_display }}</p>
   <p><strong>Priority:</strong> {{ task.get_priority_display }}</p>
 

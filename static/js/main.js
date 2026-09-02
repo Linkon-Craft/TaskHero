@@ -1,77 +1,71 @@
+console.log("TaskHero notification script loaded.");
+
+
 // =====================================================
-// TASKHERO BROWSER NOTIFICATIONS
+// TRACK NOTIFICATIONS ALREADY SHOWN
 // =====================================================
 
 let shownNotifications = new Set();
 
 
-// -----------------------------------------------------
-// Request browser notification permission
-// -----------------------------------------------------
+// =====================================================
+// ENABLE BROWSER NOTIFICATIONS
+// =====================================================
 
-function requestNotificationPermission() {
-
-    if (!("Notification" in window)) {
-
-        console.log(
-            "This browser does not support notifications."
-        );
-
-        return;
-    }
+const notificationButton =
+    document.getElementById("enable-notifications");
 
 
-    if (Notification.permission === "default") {
+if (notificationButton) {
 
-        Notification.requestPermission()
-            .then(permission => {
+    notificationButton.addEventListener(
+        "click",
+        async function () {
 
-                if (permission === "granted") {
+            console.log("Notification button clicked.");
 
-                    console.log(
-                        "TaskHero notifications enabled."
-                    );
+            if (!("Notification" in window)) {
 
-                } else {
-
-                    console.log(
-                        "TaskHero notifications denied."
-                    );
-                }
-
-            })
-            .catch(error => {
-
-                console.error(
-                    "Notification permission error:",
-                    error
+                alert(
+                    "Your browser does not support notifications."
                 );
 
-            });
-    }
+                return;
+            }
+
+            const permission =
+                await Notification.requestPermission();
+
+            console.log(
+                "Notification permission:",
+                permission
+            );
+
+            if (permission === "granted") {
+
+                // Test that browser notifications work
+                new Notification(
+                    "TaskHero Notifications Enabled",
+                    {
+                        body:
+                            "You will now receive TaskHero reminders."
+                    }
+                );
+
+            } else {
+
+                alert(
+                    "Please allow notifications for TaskHero."
+                );
+            }
+        }
+    );
 }
 
 
-// -----------------------------------------------------
-// Show browser notification
-// -----------------------------------------------------
-
-function showNotification(title, options) {
-
-    if (
-        "Notification" in window &&
-        Notification.permission === "granted"
-    ) {
-
-        new Notification(title, options);
-
-    }
-}
-
-
-// -----------------------------------------------------
-// Check Django notifications
-// -----------------------------------------------------
+// =====================================================
+// CHECK DJANGO NOTIFICATIONS
+// =====================================================
 
 function checkNotifications() {
 
@@ -92,7 +86,6 @@ function checkNotifications() {
             throw new Error(
                 `HTTP error: ${response.status}`
             );
-
         }
 
         return response.json();
@@ -101,10 +94,16 @@ function checkNotifications() {
 
     .then(notifications => {
 
+        console.log(
+            "Notifications received:",
+            notifications
+        );
+
+
         notifications.forEach(notification => {
 
-            // Prevent the same notification
-            // from appearing repeatedly
+            // Don't show the same notification
+            // repeatedly during this browser session
 
             if (
                 shownNotifications.has(
@@ -120,13 +119,21 @@ function checkNotifications() {
             );
 
 
-            showNotification(
-                "TaskHero Reminder",
-                {
-                    body: notification.message,
+            // Show the REAL Django notification
 
-                }
-            );
+            if (
+                "Notification" in window &&
+                Notification.permission === "granted"
+            ) {
+
+                new Notification(
+                    "TaskHero Reminder",
+                    {
+                        body: notification.message
+                    }
+                );
+
+            }
 
         });
 
@@ -143,18 +150,15 @@ function checkNotifications() {
 }
 
 
-// -----------------------------------------------------
-// Start notification system
-// -----------------------------------------------------
+// =====================================================
+// START NOTIFICATION CHECKING
+// =====================================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        requestNotificationPermission();
-
-
-        // Check immediately
+        // Check immediately after page loads
 
         checkNotifications();
 

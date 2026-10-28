@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
+
 
 load_dotenv()
 
@@ -37,6 +39,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    "www.taskhero.space",
 ]
 
 render_domain = os.getenv("RENDER_DOMAIN")
@@ -119,6 +122,13 @@ else:
         }
     }
 
+
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+
+RESEND_FROM_EMAIL = os.getenv(
+    "RESEND_FROM_EMAIL",
+    "TaskHero <onboarding@resend.dev>"
+)
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -168,6 +178,38 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     'https://taskhero-1.onrender.com',
 ]
+
+CELERY_BROKER_URL = os.getenv(
+    "CELERY_BROKER_URL"
+)
+
+CELERY_BROKER_USE_SSL = {
+    "ssl_cert_reqs": "none",
+}
+
+CELERY_ACCEPT_CONTENT = [
+    "json"
+]
+
+CELERY_TASK_SERIALIZER = "json"
+
+CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_TIMEZONE = 'UTC'
+
+CELERY_BEAT_SCHEDULE = {
+
+    "check-task-reminders": {
+
+        "task": "taskhero.tasks.send_reminders",
+
+        "schedule": timedelta(hours=1),
+
+    },
+
+}
+
+# 152cc4f7-b941-4a4b-85a4-ba29aa8e034c
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
